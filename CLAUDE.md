@@ -112,8 +112,9 @@ node tools/check.mjs
 
 ## Git et déploiement
 
-- Dépôt prévu : https://github.com/vigierAudrey/AnglaisOwen (branche `main`), hébergé sur
-  **GitHub Pages** → https://vigieraudrey.github.io/AnglaisOwen/ (comme les deux autres apps).
+- Dépôt : https://github.com/vigierAudrey/AnglaisOwen (branche `main`).
+- Hébergement : **GitHub Pages** depuis `main` (racine) → https://vigieraudrey.github.io/AnglaisOwen/
+  Chaque `git push` sur `main` met le site à jour (1 à 2 min). Penser à incrémenter `VERSION` dans `sw.js`.
 - Messages de commit en français. E-mail de commit : l'adresse noreply GitHub
   (`193433370+vigierAudrey@users.noreply.github.com`), jamais une adresse personnelle (dépôt public).
 

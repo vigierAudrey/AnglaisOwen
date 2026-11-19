@@ -4,6 +4,8 @@ Application pour **découvrir l'anglais en s'amusant** (conçue pour un enfant d
 Elle fonctionne sur smartphone, tablette et PC, s'installe comme une vraie application et
 marche **hors connexion**. Projet jumeau de Maths Owen et Français Owen.
 
+👉 **Jouer / installer : https://vigieraudrey.github.io/AnglaisOwen/**
+
 ## Ce qu'il y a dedans
 
 **👋 Hello!** : bonjour, merci, s'il te plaît, pardon… (16 formules), « Comment ça va ? »
