@@ -83,6 +83,46 @@ for (const u of units) {
     if (verbose) for (const s of samples) console.log('    ', s);
   }
 }
+// Le tour du monde : chaque étape vise des notions qui existent et un exercice / jeu qui marche avec.
+{
+  const { WORLDS, STEPS, GAME_GOALS } = await import('../js/adventure/worlds.js');
+  const { exercisesFor } = await import('../js/units/index.js');
+  const { MODES: M } = await import('../js/exercises/index.js');
+  const stepIds = new Set();
+  const MIN_ITEMS = { memory: 3, bubbles: 3, chrono: 4, parrot: 5, simon: 4 };
+  for (const w of WORLDS) {
+    if (!w.steps.at(-1).boss) err('aventure', w.id, 'le pays ne finit pas par un gardien');
+    for (const k of ['name', 'en', 'emoji', 'intro', 'fact']) if (!w[k]) err('aventure', w.id, 'champ manquant', k);
+  }
+  for (const s of STEPS) {
+    if (stepIds.has(s.id)) err('aventure', 'id d’étape en double', s.id);
+    stepIds.add(s.id);
+    if (s.screen === 'cafe') continue;
+    const u = units.find((x) => x.id === s.unitId);
+    if (!u) { err('aventure', s.id, 'univers inconnu', s.unitId); continue; }
+    const skills = s.skillIds.map((id) => u.skills.find((k) => k.id === id));
+    if (skills.some((k) => !k)) { err('aventure', s.id, 'notion inconnue', s.skillIds); continue; }
+    const items = skills.flatMap((k) => k.items);
+    if (s.screen) {
+      if (!GAME_GOALS[s.screen] || !M[s.screen]?.screen) err('aventure', s.id, 'jeu inconnu', s.screen);
+      if (s.screen !== 'memory' && !s.goal) err('aventure', s.id, 'objectif (goal) manquant');
+      const n = items.filter((i) => i.kind).length;
+      if (n < (MIN_ITEMS[s.screen] || 1)) err('aventure', s.id, 'pas assez d’éléments illustrés pour', s.screen, n);
+      continue;
+    }
+    const modeId = s.boss ? 'mix' : s.mode;
+    if (!s.boss && !EXERCISES[modeId]) { err('aventure', s.id, 'exercice inconnu', modeId); continue; }
+    let built = 0;
+    for (const k of skills) {
+      const ctx = { unit: u, skill: k, skills, pool: items };
+      for (const it of k.items) for (const id of exercisesFor(u, k, modeId)) if (EXERCISES[id]?.build(it, ctx)) { built++; break; }
+    }
+    if (built < 4) err('aventure', s.id, `seulement ${built} questions possibles`);
+    if (verbose) console.log(`  ${s.id} ${s.label}: ${built} éléments jouables`);
+  }
+  console.log(`🗺️ tour du monde : ${WORLDS.length} pays, ${STEPS.length} étapes`);
+}
+
 // Tous les fichiers livrés sont dans le cache hors-ligne (sw.js)
 const { readFileSync, readdirSync } = await import('node:fs');
 const sw = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');

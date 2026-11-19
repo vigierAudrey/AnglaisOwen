@@ -12,10 +12,11 @@ import { speak, stopSpeaking } from '../ui/speech.js';
 import { plain } from '../lang/en.js';
 import { sound } from '../ui/sound.js';
 import { confetti } from '../ui/confetti.js';
+import { questOutcome, questScore } from '../adventure/progress.js';
 
 const ROUNDS = 10;
 
-export default function bubbles({ unitId = 'words', skillIds }) {
+export default function bubbles({ unitId = 'words', skillIds, quest }) {
   const st = getState();
   const unit = getUnit(unitId);
   const items = itemsFor(unit, skillIds).filter((i) => i.kind);
@@ -107,7 +108,8 @@ export default function bubbles({ unitId = 'words', skillIds }) {
       text: score === ROUNDS ? 'Toutes les bulles du premier coup ! Amazing! 🎉' : `${score} bulles éclatées du premier coup sur ${ROUNDS} !`,
       mood: score >= 7 ? 'wow' : 'happy',
       stars,
-      replay: () => go('bubbles', { unitId, skillIds }, { replace: true }),
+      replay: () => go('bubbles', { unitId, skillIds, quest }, { replace: true }),
+      quest: quest && questOutcome(quest, { ...questScore(quest, score), retry: () => go('bubbles', { unitId, skillIds, quest }, { replace: true }) }),
     });
   }
 

@@ -11,10 +11,11 @@ import { speak } from '../ui/speech.js';
 import { plain } from '../lang/en.js';
 import { sound } from '../ui/sound.js';
 import { confetti } from '../ui/confetti.js';
+import { questOutcome, questScore } from '../adventure/progress.js';
 
 const PAIRS = 6;
 
-export default function memory({ unitId = 'words', skillIds }) {
+export default function memory({ unitId = 'words', skillIds, quest }) {
   const st = getState();
   const unit = getUnit(unitId);
   const el = h('div', { class: `screen memory theme-${unitId}` }, header('Memory'));
@@ -94,7 +95,8 @@ export default function memory({ unitId = 'words', skillIds }) {
     endSheet(el, {
       text: isRecord && prev !== undefined ? `Nouveau record : ${moves} coups ! 🎉` : `Well done! Toutes les paires en ${moves} coups !`,
       stars: bonus,
-      replay: () => go('memory', { unitId, skillIds }, { replace: true }),
+      replay: () => go('memory', { unitId, skillIds, quest }, { replace: true }),
+      quest: quest && questOutcome(quest, { ok: true, stars: moves <= chosen.length + 2 ? 3 : moves <= chosen.length + 5 ? 2 : 1, retry: () => go('memory', { unitId, skillIds, quest }, { replace: true }) }),
     });
   }
 

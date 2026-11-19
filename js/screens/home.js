@@ -6,6 +6,7 @@ import { masteryOf } from '../core/srs.js';
 import { mascot, starPill, streakPill, levelBadge, parentGate, factCard } from '../ui/components.js';
 import { speak } from '../ui/speech.js';
 import { pick } from '../core/util.js';
+import { adventureCard } from '../adventure/homeCard.js';
 
 const GREETINGS = ['On part en voyage en anglais ?', 'Let’s play! On joue ?', 'Prêt pour une mission en anglais ?', 'Allez, on gagne des étoiles !', 'Woof woof ! On apprend des mots ?'];
 
@@ -52,6 +53,7 @@ export default function home() {
     ),
     mascot(h('span', {}, hello, h('br'), pick(GREETINGS)), { size: 'big' }),
     levelBadge(),
+    adventureCard(),
     reviewCard,
     h(
       'div',

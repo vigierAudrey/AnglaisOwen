@@ -12,12 +12,13 @@ import { say, speak, stopSpeaking } from '../ui/speech.js';
 import { mascot, listenBtn, frListen, visual, MASCOT } from '../ui/components.js';
 import { pick, shuffle } from '../core/util.js';
 import { unlockedCount } from '../core/rewards.js';
+import { bossArena } from '../adventure/arena.js';
 
 const PRAISE = ['Bravo !', 'Super !', 'Great!', 'Well done!', 'Excellent!', 'Génial !', 'Yes!', 'Awesome!', 'Bien joué !', 'Perfect!'];
 const OOPS = ['Presque !', 'Pas grave, on apprend !', 'Oups ! Regarde bien :', 'On le retient ensemble :'];
 
 export default function sessionScreen(params) {
-  const { unitId, skillIds = [], mode: modeId, itemIds } = params;
+  const { unitId, skillIds = [], mode: modeId, itemIds, quest } = params;
   const st = getState();
   const review = modeId === 'review';
   const unit = unitId ? getUnit(unitId) : null;
@@ -37,7 +38,9 @@ export default function sessionScreen(params) {
 
   let items = null;
   items = (itemIds ? itemIds.map(itemById).filter(Boolean) : itemsFor(unit, skillIds)).filter((i) => buildFor(i));
-  const total = review ? Math.max(5, Math.min(items.length + 2, 15)) : itemIds ? Math.min(st.settings.questionsPerSession, Math.max(4, items.length * 3)) : st.settings.questionsPerSession;
+  // Gardien de l'aventure : on joue jusqu'à le battre (ou jusqu'à perdre ses boucliers).
+  const boss = quest ? bossArena(quest) : null;
+  const total = boss ? Infinity : review ? Math.max(5, Math.min(items.length + 2, 15)) : itemIds ? Math.min(st.settings.questionsPerSession, Math.max(4, items.length * 3)) : st.settings.questionsPerSession;
   const session = createSession({ facts: items, state: st, count: total });
   const stickersBefore = unlockedCount(st.stars);
   const theme = unit ? `theme-${unit.id}` : 'theme-review';
@@ -70,6 +73,7 @@ export default function sessionScreen(params) {
     'div',
     { class: `screen session ${theme}` },
     h('div', { class: 'session-top' }, h('button', { class: 'icon-btn', onclick: () => back(), 'aria-label': 'Quitter' }, '✕'), progressEl, streakEl),
+    boss?.el,
     h('div', { class: 'q-area' }, h('div', { class: 'q-head' }, dog, instr), card, praiseEl),
     answerZone,
     sheet
@@ -90,6 +94,11 @@ export default function sessionScreen(params) {
   };
 
   function updateTop() {
+    if (boss) {
+      progressEl.replaceChildren(h('div', { class: 'boss-level' }, boss.title));
+      streakEl.textContent = streak >= 2 ? `🔥 ${streak}` : '';
+      return;
+    }
     const pct = Math.min(100, (asked / total) * 100);
     progressEl.replaceChildren(
       h('div', { class: 'bar' }, h('div', { class: 'bar-fill', style: { width: `${pct}%` } })),
@@ -216,7 +225,8 @@ export default function sessionScreen(params) {
 
   function next() {
     if (finished) return;
-    if (session.done()) return finish();
+    if (session.done() || boss?.over()) return finish();
+    boss?.taunt();
     q = session.next(buildFor);
     if (!q) return finish();
     locked = false;
@@ -248,7 +258,10 @@ export default function sessionScreen(params) {
       st.stars++;
       btn?.classList.add('right');
       renderCard('ok');
-      if (streak % 5 === 0) {
+      if (boss) {
+        praiseEl.textContent = boss.hit(streak);
+        dogMood(streak % 3 === 0 ? 'wow' : 'happy');
+      } else if (streak % 5 === 0) {
         sound.combo();
         praiseEl.textContent = `🔥 ${streak} d’affilée ! +1 ⭐`;
         dogMood('wow');
@@ -264,7 +277,8 @@ export default function sessionScreen(params) {
       pending = setTimeout(next, wait);
     } else {
       streak = 0;
-      sound.ko();
+      if (boss) praiseEl.textContent = boss.miss();
+      else sound.ko();
       btn?.classList.add('wrong');
       mistakes.set(q.item.id, q.item);
       dogMood('oops');
@@ -321,6 +335,8 @@ export default function sessionScreen(params) {
         earned,
         bestStreak,
         stickersBefore,
+        quest,
+        boss: boss?.result(),
         mistakes: [...mistakes.values()].map((i) => ({ id: i.id, en: i.answer || i.en, fr: i.fr, emoji: i.emoji || '' })),
       },
       { replace: true }

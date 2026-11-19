@@ -3,16 +3,23 @@
 // mise à jour en arrière-plan (la nouvelle version s'affiche au lancement suivant).
 // ⚠️ Quand on ajoute un fichier, l'ajouter à ASSETS et incrémenter VERSION.
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = `anglaisowen-${VERSION}`;
 const ASSETS = [
   './',
   'index.html',
   'manifest.webmanifest',
   'css/style.css',
+  'css/adventure.css',
   'icons/icon-192.png',
   'icons/icon-512.png',
   'js/app.js',
+  'js/adventure/arena.js',
+  'js/adventure/homeCard.js',
+  'js/adventure/map.js',
+  'js/adventure/progress.js',
+  'js/adventure/treasures.js',
+  'js/adventure/worlds.js',
   'js/core/rewards.js',
   'js/core/router.js',
   'js/core/session.js',

@@ -13,6 +13,7 @@ import { speak, speakSeq, stopSpeaking } from '../ui/speech.js';
 import { article } from '../lang/en.js';
 import { sound } from '../ui/sound.js';
 import { confetti } from '../ui/confetti.js';
+import { questOutcome, questScore } from '../adventure/progress.js';
 
 const CUSTOMERS = 6;
 // [mot, pluriel]
@@ -25,7 +26,7 @@ const PEOPLE = ['👧', '👦', '👩', '👨', '👵', '👴', '🧑', '👸', 
 
 const part = (it, n) => (n === 1 ? `${article(it.en)} ${it.en}` : `${NUMBER_WORDS[n]} ${it.pl}`);
 
-export default function cafe() {
+export default function cafe({ quest } = {}) {
   const st = getState();
   const el = h('div', { class: 'screen cafe theme-words' }, header('Le petit café'));
   let num = 0;
@@ -109,7 +110,8 @@ export default function cafe() {
       text: `${served} client${served > 1 ? 's' : ''} servi${served > 1 ? 's' : ''} sur ${CUSTOMERS} ! ${served === CUSTOMERS ? 'Best café in town! ☕' : ''}`,
       mood: served >= 4 ? 'wow' : 'happy',
       stars: served * 2 + bonus,
-      replay: () => go('cafe', {}, { replace: true }),
+      replay: () => go('cafe', { quest }, { replace: true }),
+      quest: quest && questOutcome(quest, { ...questScore(quest, served), retry: () => go('cafe', { quest }, { replace: true }) }),
     });
   }
 

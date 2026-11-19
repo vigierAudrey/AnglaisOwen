@@ -12,10 +12,11 @@ import { speak, stopSpeaking } from '../ui/speech.js';
 import { plain, cap } from '../lang/en.js';
 import { sound } from '../ui/sound.js';
 import { confetti } from '../ui/confetti.js';
+import { questOutcome, questScore } from '../adventure/progress.js';
 
 const ROUNDS = 10;
 
-export default function simon({ unitId = 'actions', skillIds = [] }) {
+export default function simon({ unitId = 'actions', skillIds = [], quest }) {
   const st = getState();
   const unit = getUnit(unitId);
   let items = itemsFor(unit, skillIds.filter((s) => ['commands', 'moves'].includes(s)));
@@ -87,7 +88,8 @@ export default function simon({ unitId = 'actions', skillIds = [] }) {
       text: `${score} ordres réussis sur ${ROUNDS} ! ${score >= 8 ? 'Simon is impressed! 🤩' : 'Good job!'}`,
       mood: score >= 7 ? 'wow' : 'happy',
       stars,
-      replay: () => go('simon', { unitId, skillIds }, { replace: true }),
+      replay: () => go('simon', { unitId, skillIds, quest }, { replace: true }),
+      quest: quest && questOutcome(quest, { ...questScore(quest, score), retry: () => go('simon', { unitId, skillIds, quest }, { replace: true }) }),
     });
   }
 

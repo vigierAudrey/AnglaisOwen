@@ -7,6 +7,7 @@ import { getUnit, enabledSkills } from '../units/index.js';
 import { header, mascot } from '../ui/components.js';
 
 const GAMES = [
+  { screen: 'adventure', unitId: 'review', emoji: '🗺️', label: 'Le tour du monde', desc: 'De pays en pays, libère les amis de Biscuit' },
   { screen: 'bubbles', unitId: 'words', emoji: '🫧', label: 'Les bulles', desc: 'Écoute et éclate la bonne bulle' },
   { screen: 'simon', unitId: 'actions', emoji: '🙋', label: 'Jacques a dit', desc: '« Simon says… » : bouge comme il dit !' },
   { screen: 'cafe', unitId: 'words', emoji: '☕', label: 'Le petit café', desc: 'Sers les clients qui commandent en anglais' },
@@ -23,12 +24,12 @@ const GAMES = [
 
 const SOON = [
   { emoji: '🎵', label: 'Les comptines' },
-  { emoji: '🗺️', label: 'Le tour du monde' },
 ];
 
 export default function games() {
   const st = getState();
   const launch = (g) => {
+    if (g.screen === 'adventure') return go('adventure');
     let skillIds = enabledSkills(getUnit(g.unitId), st).map((s) => s.id);
     if (g.skill) skillIds = skillIds.includes(g.skill) ? [g.skill] : [];
     if (g.screen) go(g.screen, { unitId: g.unitId, skillIds });

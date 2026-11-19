@@ -1,0 +1,184 @@
+/* ==========================================================================
+   Anglais Owen — le tour du monde (carte, étapes, gardiens, valise de voyage)
+   Fichier séparé de style.css : tout est préfixé .adv-*, .boss-* ou .world-*.
+   Chaque pays a son fond (--wbg) et la couleur de son chemin (--path).
+   ========================================================================== */
+
+/* ---------- Carte d'entrée sur l'accueil ---------- */
+.adv-home-card {
+  display: flex; align-items: center; gap: 14px; border: 0; text-align: left; border-radius: var(--radius);
+  padding: 16px; min-height: 92px; color: #fff;
+  background: linear-gradient(135deg, #F43F5E, #FF8A3D 45%, #2F6FEB); box-shadow: 0 7px 0 #1D4FB8;
+  transition: transform .1s;
+}
+.adv-home-card:active { transform: translateY(4px); box-shadow: 0 3px 0 #1D4FB8; }
+.adv-home-card:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
+.adv-home-emoji { font-size: 2.8rem; animation: float 3s ease-in-out infinite; }
+.adv-home-txt { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.adv-home-txt b { font-size: 1.3rem; }
+.adv-home-txt small { font-size: .95rem; opacity: .95; }
+.adv-home-go { font-size: 1.6rem; }
+
+/* ---------- Pays (fonds) ---------- */
+.world-london    { --wbg: linear-gradient(#FFE1E7, #F6F1EA 50%, #C9D8F5); --path: #C81E45; }
+.world-scotland  { --wbg: linear-gradient(#E6E0FF, #D9EED2 55%, #A9CBE8); --path: #4B3F9E; }
+.world-ireland   { --wbg: linear-gradient(#E4FBE4, #BDEDB0 55%, #8BD47D); --path: #2E8B3A; }
+.world-newyork   { --wbg: linear-gradient(#FFF6C9, #FFE07A 45%, #B9C6D9); --path: #C28A00; }
+.world-canada    { --wbg: linear-gradient(#FFE6DC, #F7F7F7 45%, #C8E3C0); --path: #C0392B; }
+.world-australia { --wbg: linear-gradient(#FFE9C7, #FFC98A 55%, #F2A365); --path: #B4562A; }
+.world-safari    { --wbg: linear-gradient(#FFF3D2, #F1DB9A 55%, #CBB26A); --path: #8A6A1F; }
+.world-island    { --wbg: linear-gradient(#D7F4FF, #A8E3F5 50%, #F5E1A4); --path: #0779AE; }
+
+/* ---------- La carte ---------- */
+.adv-progress { display: flex; align-items: center; gap: 10px; font-weight: 600; background: var(--card); border-radius: 999px; padding: 8px 14px; box-shadow: var(--shadow); }
+.adv-progress .bar { flex: 1; }
+.adv-fill { background: linear-gradient(90deg, #F43F5E, #FF8A3D, #2F6FEB); }
+
+.adv-bag-btn {
+  display: flex; align-items: center; gap: 12px; border: 0; text-align: left; border-radius: var(--radius); padding: 12px 14px;
+  background: #FFF3CC; box-shadow: 0 6px 0 #F0CF6E; color: var(--ink); min-height: 64px;
+}
+.adv-bag-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #F0CF6E; }
+.adv-bag-emoji { font-size: 2.2rem; }
+.adv-bag-txt { flex: 1; display: flex; flex-direction: column; }
+.adv-bag-txt small { color: #7A5A00; }
+.adv-bag-friends { display: flex; flex-wrap: wrap; justify-content: flex-end; max-width: 45%; font-size: 1.2rem; }
+.adv-bag-friends .off { opacity: .35; font-size: .9rem; }
+
+.adv-world { border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; color: var(--ink); background: var(--wbg); }
+.adv-world.far { filter: grayscale(.75) opacity(.75); }
+.adv-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px 0; width: 100%; border: 0; background: none; text-align: left; }
+.adv-world-emoji { font-size: 2.3rem; }
+.adv-title { flex: 1; display: flex; flex-direction: column; }
+.adv-title b { font-size: 1.15rem; }
+.adv-title small { font-size: .92rem; opacity: .85; }
+.adv-count { font-weight: 700; background: rgba(255, 255, 255, .75); border-radius: 999px; padding: 4px 10px; font-size: 1.05rem; }
+.adv-fact {
+  display: flex; flex-direction: column; gap: 2px; margin: 8px 14px 0; padding: 8px 12px; border: 0; border-radius: 14px;
+  background: rgba(255, 255, 255, .7); text-align: left; width: calc(100% - 28px);
+}
+.adv-fact span { font-weight: 600; color: var(--path); }
+.adv-fact small { font-size: .88rem; line-height: 1.3; }
+.adv-fact:active { transform: scale(.98); }
+.adv-map { position: relative; }
+.adv-path { position: absolute; inset: 0; color: var(--path); opacity: .55; pointer-events: none; }
+.adv-path svg { display: block; }
+
+.adv-node {
+  position: absolute; translate: -50% -38px; border: 0; background: none; padding: 0; width: 124px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.adv-circle {
+  width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; font-size: 2.3rem;
+  background: #fff; border: 4px solid var(--path); box-shadow: 0 6px 0 rgba(0, 0, 0, .18);
+}
+.adv-node.boss .adv-circle { width: 88px; height: 88px; font-size: 2.8rem; border-color: #3B2F63; background: #F1EAFF; }
+.adv-node.locked .adv-circle { background: rgba(255, 255, 255, .55); border-color: rgba(0, 0, 0, .15); font-size: 1.7rem; box-shadow: none; }
+.adv-node.boss.locked .adv-circle { font-size: 2.3rem; filter: grayscale(.6); }
+.adv-node.done .adv-circle { border-color: var(--ok); }
+.adv-node.boss.done .adv-circle { background: #FFF7D6; border-color: var(--star-d); }
+.adv-node.current .adv-circle { border-color: #FF8A3D; animation: pulse .7s ease infinite alternate; box-shadow: 0 0 0 7px rgba(255, 255, 255, .75), 0 6px 0 rgba(0, 0, 0, .18); }
+.adv-node.fresh .adv-circle { animation: advUnlock .9s ease, pulse .7s ease .9s infinite alternate; }
+.adv-node:active .adv-circle { transform: scale(.94); }
+.adv-node:focus-visible { outline: none; }
+.adv-node:focus-visible .adv-circle { outline: 4px solid var(--ink); outline-offset: 3px; }
+.adv-label { font-size: .85rem; font-weight: 600; line-height: 1.15; text-align: center; background: rgba(255, 255, 255, .8); border-radius: 10px; padding: 2px 6px; }
+.adv-node.locked .adv-label { opacity: .6; }
+.adv-node-stars { font-size: .85rem; letter-spacing: -2px; }
+.adv-buddy { position: absolute; top: -36px; right: -6px; display: flex; align-items: flex-end; pointer-events: none; }
+.adv-dog { font-size: 2.1rem; animation: float 1.6s ease-in-out infinite; }
+.adv-friend { font-size: 1.25rem; margin-left: -4px; animation: float 1.6s ease-in-out infinite; }
+.adv-friend:nth-child(2) { animation-delay: .25s; }
+.adv-friend:nth-child(3) { animation-delay: .5s; }
+.adv-friend:nth-child(4) { animation-delay: .75s; }
+@keyframes advUnlock { 0% { transform: scale(.2) rotate(-30deg); } 60% { transform: scale(1.25) rotate(8deg); } }
+
+.adv-sheet-emoji { font-size: 4rem; }
+.adv-goal { margin: 0; font-size: 1.15rem; }
+.btn.adv-go { background: #FF8A3D; box-shadow: 0 6px 0 #D2641C; color: #fff; }
+.btn.adv-go:active { box-shadow: 0 2px 0 #D2641C; }
+.adv-stars { font-size: 2rem; display: flex; gap: 6px; justify-content: center; }
+.adv-stars.big { font-size: 3.2rem; }
+.adv-stars span { filter: grayscale(1) opacity(.35); }
+.adv-stars span.on { filter: none; animation: starIn .5s backwards; }
+.adv-stars span.on:nth-child(2) { animation-delay: .18s; }
+.adv-stars span.on:nth-child(3) { animation-delay: .36s; }
+
+/* ---------- Une étape ---------- */
+.adv-banner { display: flex; align-items: center; gap: 10px; background: #FFF3CC; border: 2px dashed var(--star-d); border-radius: 16px; padding: 6px 12px; }
+.adv-banner-emoji { font-size: 1.7rem; }
+.adv-banner-txt { display: flex; flex-direction: column; line-height: 1.2; }
+.adv-banner-txt small { color: #7A5A00; }
+
+.adv-result { align-items: center; text-align: center; border: 3px solid var(--line); }
+.adv-result.ok { border-color: var(--star); background: #FFFBEA; }
+.adv-result h2 { font-size: 1.6rem; }
+.adv-freed { display: flex; gap: 6px; align-items: flex-end; justify-content: center; }
+.adv-freed-friend { font-size: 4.2rem; animation: advUnlock .9s ease, float 2s ease-in-out .9s infinite; }
+
+/* ---------- Le gardien (dans la séance) ---------- */
+.adv-arena-wrap { display: flex; flex-direction: column; gap: 6px; }
+.boss-arena {
+  position: relative; border-radius: 22px; padding: 8px 12px 10px; overflow: hidden;
+  background: linear-gradient(180deg, #3B2F63, #5B4A8F); color: #fff; display: flex; flex-direction: column; gap: 4px; align-items: center;
+}
+.boss-name { font-weight: 600; font-size: 1.05rem; }
+.boss-level { flex: 1; text-align: center; font-weight: 600; color: var(--muted); }
+.boss-hp { display: flex; flex-wrap: wrap; justify-content: center; gap: 1px; font-size: 1rem; }
+.heart.lost { opacity: .5; animation: popc .3s; }
+.boss-stage { display: flex; align-items: center; gap: 10px; }
+.boss-face { font-size: clamp(3rem, 15vw, 4.4rem); line-height: 1; animation: float 2.4s ease-in-out infinite; }
+.boss-face.hit { animation: bossHit .45s ease; }
+.boss-face.laugh { animation: wiggle .25s ease 3; }
+.boss-face.ko-out { animation: bossOut .9s ease forwards; }
+.boss-say { color: var(--ink); max-width: 44vw; display: flex; flex-direction: column; line-height: 1.2; padding: 8px 12px; }
+.boss-say b { font-size: 1rem; }
+.boss-say small { font-size: .8rem; color: var(--muted); }
+.bolt { position: absolute; left: 50%; bottom: -20px; font-size: 2.6rem; opacity: 0; pointer-events: none; }
+.bolt.fire { animation: boltUp .4s ease-in; }
+.adv-cage {
+  font-size: 1.8rem; padding: 4px 6px; border-radius: 12px; line-height: 1;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .15) 0 3px, transparent 3px 11px), rgba(0, 0, 0, .25);
+  animation: wiggle 1.6s ease-in-out infinite;
+}
+.adv-shields { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 1.2rem; font-weight: 600; }
+.adv-shields-label { font-size: .9rem; color: var(--muted); margin-right: 4px; }
+.shield.lost { filter: grayscale(1) opacity(.3); animation: shake .4s; }
+/* Avec l'arène, la question se fait plus compacte. */
+.adv-arena-wrap ~ .q-area { min-height: 0; flex: none; }
+.adv-arena-wrap ~ .q-area .q-card { min-height: 0; padding: 66px 10px 14px; }
+.adv-arena-wrap ~ .q-area .mini-owl { display: none; }
+@keyframes boltUp { 0% { opacity: 1; transform: translate(-50%, 0) scale(.6); } 90% { opacity: 1; } 100% { opacity: 0; transform: translate(-90%, -150px) scale(1.4); } }
+@keyframes bossHit { 20% { transform: translateX(-10px) rotate(-8deg); filter: brightness(2); } 50% { transform: translateX(10px) rotate(8deg); } 80% { transform: translateX(-4px); } }
+@keyframes bossOut { 30% { transform: scale(1.3) rotate(20deg); } to { transform: scale(0) rotate(720deg); opacity: 0; } }
+
+/* ---------- Ma valise de voyage ---------- */
+.adv-team {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 4px; padding: 14px;
+  border-radius: var(--radius); background: linear-gradient(#DDF3FF, #FFE8D6); box-shadow: var(--shadow); min-height: 90px;
+}
+.adv-team-dog { font-size: 3.4rem; animation: float 2.4s ease-in-out infinite; }
+.adv-team-friend { font-size: 2.4rem; animation: hop 1.4s ease-in-out infinite; }
+.adv-friend-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (min-width: 560px) { .adv-friend-grid { grid-template-columns: repeat(4, 1fr); } }
+.adv-friend-card {
+  border: 2px solid var(--line); background: #F6F1EA; border-radius: 18px; padding: 12px 8px; min-height: 120px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; color: var(--muted);
+}
+.adv-friend-card.freed { background: #FFF8E1; border-color: #FFD27A; color: var(--ink); box-shadow: 0 5px 0 #F3C25E; }
+.adv-friend-card:active { transform: translateY(3px); }
+.adv-friend-emoji { font-size: 2.6rem; }
+.adv-friend-card small { font-size: .8rem; line-height: 1.2; }
+.adv-note { display: flex; align-items: center; gap: 10px; border: 0; border-radius: 14px; padding: 8px 10px; background: #F6F1EA; text-align: left; width: 100%; }
+.adv-note:active { transform: scale(.98); }
+.adv-note-emoji { font-size: 2rem; }
+.adv-note-txt { display: flex; flex-direction: column; gap: 2px; }
+.adv-note-txt small { font-size: .88rem; line-height: 1.3; }
+.adv-crown-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.adv-crown-row:last-child { border-bottom: 0; }
+.adv-crown { font-size: 1.6rem; filter: grayscale(1) opacity(.3); }
+.adv-crown.on { filter: none; animation: pulse .8s ease infinite alternate; }
+.adv-crown-name { flex: 1.4; font-size: .95rem; font-weight: 600; }
+.adv-crown-row .bar { flex: 1; }
+.adv-crown-row b { font-size: .9rem; min-width: 58px; text-align: right; }
+.center-txt { text-align: center; align-items: center; }

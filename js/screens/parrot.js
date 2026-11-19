@@ -14,11 +14,12 @@ import { plain } from '../lang/en.js';
 import { recordingAvailable, startRecording, playBlob } from '../ui/record.js';
 import { sound } from '../ui/sound.js';
 import { confetti } from '../ui/confetti.js';
+import { questOutcome, questScore } from '../adventure/progress.js';
 
 const WORDS = 8;
 const MAX_MS = 3500;
 
-export default function parrot({ unitId = 'words', skillIds }) {
+export default function parrot({ unitId = 'words', skillIds, quest }) {
   const st = getState();
   const unit = getUnit(unitId);
   const items = shuffle(itemsFor(unit, skillIds).filter((i) => i.kind)).slice(0, WORDS);
@@ -104,7 +105,8 @@ export default function parrot({ unitId = 'words', skillIds }) {
     endSheet(el, {
       text: `Tu as répété ${said} mot${said > 1 ? 's' : ''} ! Ton accent anglais s’améliore ! 🦜`,
       stars: said,
-      replay: () => go('parrot', { unitId, skillIds }, { replace: true }),
+      replay: () => go('parrot', { unitId, skillIds, quest }, { replace: true }),
+      quest: quest && questOutcome(quest, { ...questScore(quest, said), retry: () => go('parrot', { unitId, skillIds, quest }, { replace: true }) }),
     });
   }
 

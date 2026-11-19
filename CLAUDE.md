@@ -61,8 +61,34 @@ js/core/              store (sauvegarde), srs (Leitner + isDue), session, router
 js/ui/                dom (h), speech (voix anglaise + française), sound, confetti, components (visuels, mascotte…), record (micro)
 js/screens/           home, unitMenu, session, results, learn, games, memory, chrono, bubbles,
                       simon, cafe, lab, parrot, rewards, parent
+js/adventure/         LE TOUR DU MONDE (zone à part, branchée sur les exercices et jeux existants)
+  worlds.js           8 pays × 6 étapes (ids w1-1… = clés de progression, ne jamais renommer)
+  progress.js         st.adventure = { done: { étape: étoiles }, seen } ; déblocage, objectifs,
+                      launchStep, questBanner, questOutcome (bilan de fin d'étape), amis, couronnes
+  arena.js            l'arène du gardien, affichée par session.js quand l'étape est un gardien
+  map.js              écran 'adventure' (carte ; Biscuit + amis libérés sur l'étape en cours)
+  treasures.js        écran 'treasures' : valise de voyage (amis, carnet de voyage, couronnes)
+  homeCard.js         carte « Le tour du monde » de l'accueil
+css/adventure.css     style du tour du monde (.adv-*, .boss-*, .world-<id>)
 tools/check.mjs       vérification des données et de tous les exercices (node) — non livré
 ```
+
+### Le tour du monde (mode aventure)
+
+Histoire : le Capitaine Embrouille 🐙 a caché les amis de Biscuit dans 8 pays où l'on parle
+anglais (Londres, Écosse, Irlande, New York, Canada, Australie, Afrique du Sud, l'île du
+Capitaine), dans l'ordre de l'appli (Hello → nombres → couleurs → mots → actions → phrases).
+Chaque pays a une curiosité (« Le savais-tu ? ») et finit par un gardien qui retient un ami : le
+battre (avant de perdre 5 boucliers 🛡️ ; 3 bonnes réponses d'affilée = coup spécial) libère
+l'ami (+10 ⭐) et ouvre le pays suivant. Le gardien parle anglais (traduction dessous).
+Une étape est soit un exercice (`mode` → écran session, réussite à 70 % des questions),
+soit un jeu (`screen` + `goal`, voir `GAME_GOALS`), soit le gardien (`boss`). Les écrans
+reçoivent le paramètre `quest` : `app.js` (withQuest) affiche le bandeau d'objectif,
+`results.js` et chaque jeu appellent `questOutcome()` (via `endSheet({ quest })` pour les jeux).
+3 étoiles sur tout un pays = couronne d'or 👑. Les réponses alimentent la même répétition
+espacée que le reste de l'appli. L'aventure ignore les notions choisies par le parent.
+Ajouter un pays : une entrée dans `WORLDS` (+ `.world-<id>` dans `css/adventure.css`) ;
+`node tools/check.mjs` vérifie chaque étape.
 
 ### Concepts
 
@@ -127,6 +153,8 @@ node tools/check.mjs
   devinettes, phrases en ordre) ; jeux Bulles, Jacques a dit, Le petit café, Labo des
   couleurs, Memory, Chrono, Perroquet (s'enregistrer et se réécouter) ; révisions du jour,
   « Le savais-tu ? », espace parents.
+- **Étape 2 (faite)** : le tour du monde (mode aventure) : 8 pays, 48 étapes, gardiens,
+  amis à libérer, valise de voyage, couronnes d'or.
 - **Ensuite** : jours de la semaine / mois / l'heure, l'alphabet chanté, petites histoires
-  illustrées à écouter, comptines, carte du monde anglophone, chiffres jusqu'à 100 en
+  illustrées à écouter, comptines, chiffres jusqu'à 100 en
   détail, « Where is…? » dans une scène, plusieurs profils enfants, export Play Store.

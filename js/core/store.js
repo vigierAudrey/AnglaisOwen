@@ -27,6 +27,7 @@ function defaults(units) {
     history: [], // dernières séances
     days: [], // jours où l'enfant a joué (AAAA-MM-JJ)
     factIndex: 0, // prochain « Le savais-tu ? »
+    adventure: { done: {}, seen: 0 }, // tour du monde : étape -> étoiles (1 à 3)
   };
 }
 
@@ -101,7 +102,7 @@ export function addStars(n) {
 }
 
 export function resetProgress() {
-  Object.assign(state, { progress: {}, stars: 0, records: {}, history: [], days: [] });
+  Object.assign(state, { progress: {}, stars: 0, records: {}, history: [], days: [], adventure: { done: {}, seen: 0 } });
   save();
 }
 

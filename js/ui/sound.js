@@ -38,5 +38,7 @@ export const sound = {
   bell: () => on() && (tone(1320, 0, 0.5, 'sine', 0.12), tone(1760, 0.05, 0.4, 'sine', 0.06)),
   splash: () => on() && tone(300, 0, 0.25, 'sawtooth', 0.04, 900),
   combo: () => on() && [784, 988, 1175].forEach((f, i) => tone(f, i * 0.07, 0.15)),
+  zap: () => on() && (tone(1400, 0, 0.18, 'sawtooth', 0.06, 200), tone(90, 0.12, 0.25, 'square', 0.08)),
+  laugh: () => on() && [520, 440, 520, 440].forEach((f, i) => tone(f, i * 0.09, 0.08, 'triangle', 0.1)),
   win: () => on() && [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i * 0.11, 0.25)),
 };

@@ -109,8 +109,8 @@ export function factCard() {
   );
 }
 
-/** Fenêtre de fin de jeu, commune à tous les jeux. */
-export function endSheet(el, { text, mood = 'wow', stars, replay, extra }) {
+/** Fenêtre de fin de jeu, commune à tous les jeux. quest : bilan de l'étape de l'aventure (remplace les boutons). */
+export function endSheet(el, { text, mood = 'wow', stars, replay, extra, quest }) {
   el.append(
     h(
       'div',
@@ -121,7 +121,7 @@ export function endSheet(el, { text, mood = 'wow', stars, replay, extra }) {
         mascot(text, { mood }),
         stars ? h('div', { class: 'earned' }, `+${stars} ⭐`) : null,
         extra || null,
-        h('div', { class: 'row' }, h('button', { class: 'btn ghost', onclick: () => back() }, '← Retour'), h('button', { class: 'btn', onclick: replay }, '🔁 Rejouer'))
+        quest || h('div', { class: 'row' }, h('button', { class: 'btn ghost', onclick: () => back() }, '← Retour'), h('button', { class: 'btn', onclick: replay }, '🔁 Rejouer'))
       )
     )
   );

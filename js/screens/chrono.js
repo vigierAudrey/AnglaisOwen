@@ -11,10 +11,11 @@ import { pick } from '../core/util.js';
 import { speak, stopSpeaking } from '../ui/speech.js';
 import { sound } from '../ui/sound.js';
 import { confetti } from '../ui/confetti.js';
+import { questOutcome, questScore } from '../adventure/progress.js';
 
 const SECONDS = 60;
 
-export default function chrono({ unitId = 'words', skillIds }) {
+export default function chrono({ unitId = 'words', skillIds, quest }) {
   const st = getState();
   const unit = getUnit(unitId);
   const items = itemsFor(unit, skillIds).filter((i) => i.kind);
@@ -80,7 +81,8 @@ export default function chrono({ unitId = 'words', skillIds }) {
       text: isNew ? `🎉 NOUVEAU RECORD : ${score} bonnes réponses !` : `${score} bonnes réponses ! Ton record : ${prev}.`,
       mood: isNew ? 'wow' : 'happy',
       stars,
-      replay: () => go('chrono', { unitId, skillIds }, { replace: true }),
+      replay: () => go('chrono', { unitId, skillIds, quest }, { replace: true }),
+      quest: quest && questOutcome(quest, { ...questScore(quest, score), retry: () => go('chrono', { unitId, skillIds, quest }, { replace: true }) }),
     });
   }
 
